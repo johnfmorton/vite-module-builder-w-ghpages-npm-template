@@ -48,7 +48,13 @@ The script will also run `npm install` to install the dependencies for the repo.
 
 Once your files are updated, you can run `npm run dev` to start the development server for the demo page and get to work on your module by editing the typescript file in the `/lib` directory.
 
-The demo page imports your module from the `/lib` directory so you can test it as you work on it. The script for your demo page is in the `/demo-page-assets` directory, `demo.ts`.
+The demo page is the `index.html` file at the root of the project. It imports your module from the `/lib` directory so you can test it as you work on it. The script for your demo page is in the `/demo-page-assets` directory, `demo.ts`.
+
+The `public` directory is where static assets are stored for the demo site. Think images, fonts, etc. This is where the `vite.config.ts` file will look for static assets to include in the build process. You can reference them in your HTML file using the `/` prefix. For example, if you have an image in the `public` directory called `image.png`, you can reference it in your HTML file like this:
+
+```html
+<img src="/image.png" alt="My image">
+```
 
 ### GitHub Pages
 
@@ -64,9 +70,23 @@ In your GitHub repo, you will need a key from your NPM repository that will allo
 
 In the repo's settings, you will need to add the secret to the repo. You can do this by going to the repo's settings, then to the "Secrets and variables" section and then select the "Actions" section. Click the "New repository secret" button and add the secret as shown below.
 
-![GitHub Secrets](./docs/gh-secrets.png)
+#### Tagging releases
+
+In the build.yml file, you will see a line that looks like this:
+
+```yaml
+tag: latest # or can be set to 'next' for pre-release, or 'beta' for beta release
+```
+
+This is the tag that will be used when you publish your module to NPM. You can change this to whatever you want. The default is "latest". You can also set it to "next" for pre-release or "beta" for beta release.
+
+#### Github Secrets
+
+![Github Secrets](./docs/gh-secrets.png)
 
 This script only attempts to run when you change the version number in the `package.json` file. During early development, I don't set this up immediately. This means the intial push to GitHub will cause this script to fail. You can ignore this failure. Once you have set up NPM publishing, you can then update the version number in the `package.json` file and push the commit to GitHub. This will cause the script to run and publish your module to NPM.
+
+The variable name `NPM_TOKEN` is the name of the secret you created in the previous step. You can change this to whatever you want, but you will need to update the workflow file to match.
 
 ### How to disable the GitHub Pages and NPM publishing
 
@@ -103,3 +123,7 @@ The other imporatnt page is the `index.html` file. This is the demo page for you
 You can see the demo page for this repo at:
 
 https://johnfmorton.github.io/vite-module-builder-w-ghpages-npm-template/
+
+## License
+
+This repo is licensed under the MIT license. You can use it for any purpose you want. You can also modify it and use it in your own projects. If you do, I would appreciate a link back to this repo so others can find it.

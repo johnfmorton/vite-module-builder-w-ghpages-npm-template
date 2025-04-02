@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Updated the directory for the demo site from "demo" to "_site"
+- Changed the TS target from "ESNext" to "ES6" in the tsconfig.json file.
+- Updated GitHub workflows to use the new directory name and use updated GitHub Actions.
 - Updated demo page styles for small screens.
 - tsconfig.json: Added `lib` property to include `DOM.Iterable`.
 - tsconfig.json: Added `forceConsistentCasingInFileNames` property set to `true`.
