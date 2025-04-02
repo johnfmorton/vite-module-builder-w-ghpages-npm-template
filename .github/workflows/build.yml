@@ -1,48 +1,38 @@
-name: Node.js CI
-# Add & Commit homepage: https://github.com/marketplace/actions/add-commit
-# NPM publish homepage: https://github.com/marketplace/actions/npm-publish
+name: Publish to NPM
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags:
+      - 'v*'
 
-permissions: write-all
+permissions:
+  contents: read
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20.x]
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
         uses: actions/setup-node@v4.0.3
         with:
           node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build
-        run: npm run build --if-present
+      - name: Build package
+        run: npm run build
 
-      # Add built files to the commit as local GitHub user (not the GitHub Actions bot)
-      - name: Add & Commit
-        uses: EndBug/add-and-commit@v9.1.4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          default_author: github_actions
-          message: "Build files"
-          add: "dist"
-          commit: --signoff
-          push: true
-
-      - name: NPM Publish
+      - name: Publish to NPM
         uses: JS-DevTools/npm-publish@v3.1.1
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          tag: latest # or can be set to 'next' for pre-release, or 'beta' for beta release
+          tag: latest

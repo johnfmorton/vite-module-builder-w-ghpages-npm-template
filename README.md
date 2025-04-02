@@ -62,6 +62,21 @@ The `public` directory is where static assets are stored for the demo site. Thin
 <img src="/image.png" alt="My image">
 ```
 
+## Publishing your module to NPM
+
+The publishing of modules has been updated from the version you see in the video. The new version relies on tags to publish the module to NPM. This is a more reliable way to publish modules to NPM.
+
+### Tagging releases
+
+To publish your module to NPM, you will need to tag the release. You can do this by running the following command:
+
+```sh
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+You can also tag releases with a GUI like Git Tower and pushe them to GitHub.
+
 ### Testing your npm package
 
 To test your npm package before publishing it, you can use the `npm pack` command. This will create a tarball of your package that you can use to test the package before publishing it to NPM.
@@ -102,10 +117,19 @@ Organizational packages default to private. If you want them public, you need to
 }
 ```
 
-### Publishing your module to NPM
+### Publishing your module to NPM for the first
+
+If you publish your module to NPM for the first time from the local command line, you will need to run the following command:
 
 ```
 npm publish --access public
+```
+
+Tagging the release as `latest` will allow you to publish a new version of your module to NPM. You can do this by running the following command:
+
+```sh
+git tag v1.2.3
+git push origin v1.2.3
 ```
 
 ### GitHub Pages
