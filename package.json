@@ -5,6 +5,9 @@
     "files": [
         "dist"
     ],
+    "publishConfig": {
+        "access": "public"
+    },
     "main": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js",
     "repository": {
         "type": "git",

@@ -92,6 +92,21 @@ npm pack
 
 This will create a .tgz file in the current directory. You can then extract this file to see the contents of the package.
 
+### Organizational repos
+
+Organizational packages default to private. If you want them public, you need to add an additional `--access public` flag to the publish command. You can do this by adding the following line to your `package.json` file:
+
+```json
+"publishConfig": {
+  "access": "public"
+}
+```
+
+### Publishing your module to NPM
+
+```
+npm publish --access public
+```
 
 ### GitHub Pages
 
