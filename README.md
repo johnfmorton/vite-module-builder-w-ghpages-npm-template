@@ -19,6 +19,7 @@ This will create a new repo in your GitHub account. You can then clone the repo 
 You can read about this repo on [my blog, SuperGeekery.com](https://supergeekery.com/blog/make-javascript-module-creation-easier-with-vite-and-automated-github-pages-and-npm-publishing). Below is a link to the video walk through that's part of the blog post.
 
 [![Watch the video](https://img.youtube.com/vi/fqL4Td5hYY0/maxresdefault.jpg)](https://youtu.be/fqL4Td5hYY0)
+
 ## Run the configuration script
 
 This repo includes a configuration script that will help you update the name of your module and other settings. To run the script, you will need to have Node installed on your machine. You can download it from https://nodejs.org/en/download/.
@@ -41,6 +42,11 @@ This will replace all the instances of "vite-module-builder-w-ghpages-npm-templa
 
 The script will also run `npm install` to install the dependencies for the repo. There is [additional information about the files](#additional-information-about-the-files) at the end of the document.
 
+In your `package.json` file, the name of your module will be set to the name you provided. You can change this to whatever you want. The default is `vite-module-builder-w-ghpages-npm-template`. If you are publishing to an organization, you will need to set the name to `@<ORG_NAME>/<MODULE_NAME>`. For example, if your organization is called "my-org" and your module is called "my-module", you would set the name to `@my-org/my-module`.
+
+You can also set the version number to whatever you want. The default is "1.0.0". During development, I set this to "1.0.0-beta.1" or something similar. You can change this to whatever you want. See the "Tagging releases" section below for more information about publishing `latest` and `beta` releases.
+
+The version number is used to determine if the module has changed and needs to be published to NPM. If you change the version number in the `package.json` file, the workflow will publish the module to NPM.
 
 ## How to work on your module
 
@@ -55,6 +61,37 @@ The `public` directory is where static assets are stored for the demo site. Thin
 ```html
 <img src="/image.png" alt="My image">
 ```
+
+### Testing your npm package
+
+To test your npm package before publishing it, you can use the `npm pack` command. This will create a tarball of your package that you can use to test the package before publishing it to NPM.
+
+```sh
+npm pack --dry-run
+
+npm notice
+npm notice 📦  my-module@1.0.0
+npm notice === Tarball Contents ===
+npm notice 1.2kB  package.json
+npm notice 1.1kB  README.md
+npm notice 3.4kB  dist/my-module.umd.js
+npm notice 3.3kB  dist/my-module.es.js
+npm notice 0.6kB  dist/my-module.d.ts
+npm notice === Tarball Details ===
+npm notice name:          my-module
+npm notice version:       1.0.0
+npm notice total files:   5
+npm notice
+```
+
+To view the contents of the package that will be published, run the following command:
+
+```sh
+npm pack
+```
+
+This will create a .tgz file in the current directory. You can then extract this file to see the contents of the package.
+
 
 ### GitHub Pages
 
