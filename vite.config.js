@@ -15,6 +15,7 @@ module.exports = defineConfig({
                 'lib/vite-module-builder-w-ghpages-npm-template.ts'
             ),
             name: 'vite-module-builder-w-ghpages-npm-template',
+            formats: ['es', 'cjs', 'umd'], // Specify the formats you want to build: ['es', 'cjs', 'umd'] - if you remove cjs or umd, it will not be built and you must remove references to it in the package.json file.
             fileName: (format) =>
                 `vite-module-builder-w-ghpages-npm-template.${format}.js`,
         },

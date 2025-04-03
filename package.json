@@ -9,26 +9,27 @@
         "access": "public",
         "tag": "latest"
     },
-    "main": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js",
+    "main": "./dist/vite-module-builder-w-ghpages-npm-template.cjs.js",
+    "exports": {
+        ".": {
+            "require": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js",
+            "import": "./dist/vite-module-builder-w-ghpages-npm-template.es.js"
+        }
+    },
     "repository": {
         "type": "git",
         "url": "https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template"
     },
     "module": "./dist/vite-module-builder-w-ghpages-npm-template.es.js",
-    "unpkg": "./dist/vite-module-builder-w-ghpages-npm-template.es.js",
+    "browser": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js",
+    "unpkg": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js",
+    "jsdelivr": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js",
     "types": "./dist/vite-module-builder-w-ghpages-npm-template.d.ts",
-    "exports": {
-        ".": {
-            "import": "./dist/vite-module-builder-w-ghpages-npm-template.es.js",
-            "require": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js"
-        }
-    },
     "scripts": {
         "clean": "rm -rf dist _site",
         "dev": "vite --host 0.0.0.0 --port 8888",
         "vite-build": "vite build --config vite.demo.config.js",
-        "build-old": "vite build --config vite.demo.config.js && vite build && tsc lib/vite-module-builder-w-ghpages-npm-template.ts --declaration --emitDeclarationOnly --outFile dist/vite-module-builder-w-ghpages-npm-template.d.ts",
-        "build": "vite build --config vite.demo.config.js && vite build && tsc -p tsconfig.build.json",
+        "build": "npm run clean && vite build --config vite.demo.config.js && vite build && tsc -p tsconfig.build.json",
         "preview": "vite preview",
         "project-setup": "node project-setup.js && npm install",
         "test": "echo \"Error: no test specified\" && exit 1"
