@@ -64,42 +64,128 @@ The `public` directory is where static assets are stored for the demo site. Thin
 
 ## Publishing your module to NPM
 
-The publishing of modules has been updated from the version you see in the video. The new version relies on tags to publish the module to NPM. This is a more reliable way to publish modules to NPM.
+The publishing process has evolved from version 1.0 to 2.0 for a more intentional release workflow. Previously, updating the version in package.json and pushing to GitHub automatically triggered an NPM release. Now, version 2.0 introduces a more deliberate process with tagging.
 
-### Tagging releases
+### A primer on tags in Git and NPM
 
-To publish your module to NPM, you will need to tag the release. You can do this by running the following command:
+This section is a brief overview of the tagging process in Git and NPM. Unfortnately, this may be a bit confusing at first.
+
+Tag exists in both Git and NPM contexts, but they serve different purposes. Let's breakdown clarify the distinction and explain their roles.
+
+### Git Tags
+
+In Git, a tag is a reference to a specific commit in the repository's history. Tags are often used to mark important points in the project, such as releases or milestones. They are immutable and serve as a snapshot of the code at that point in time.
+
+### NPM Tags
+
+In NPM, a tag is a label that can be assigned to a specific version of a package. Tags are used to manage different versions of a package and control which version is installed when users run `npm install <package-name>`. The most common tag is "latest," which indicates the most recent stable version of the package.
+When you publish a package to NPM, you can assign it a tag. By default, the latest version is tagged as "latest." However, you can also create custom tags (e.g., "beta," "alpha") to indicate pre-release versions or specific stages of development.
+
+Take a look at the `package.json` file in the root of the repo. You will see a line that looks like this:
+
+```json
+"publishConfig": {
+  "access": "public",
+  "tag": "latest"
+}
+```
+
+This line tells NPM to publish the package with the "latest" tag. You can change this to whatever you want. The default is "latest". You can also set it to "next" for pre-release or "beta" for beta release.
+
+### The publishing process
+
+## Step 1: Commit changes
+
+Ensure that all changes are committed to your local repository. This includes any modifications to the code, documentation, or other files. You also need to ensure that the version number in your `package.json` file is updated to reflect the new version of your module.
+
+For example, if you are releasing version 1.2.3 of your module, you would update the version number in the `package.json` file to "1.2.3".
+
+```sh
+{
+  "name": "my-module",
+  "version": "1.2.3",
+  "publishConfig": {
+     "access": "public",
+     "tag": "latest"
+   }
+  ...
+}
+```
+
+But, if this is an early development version, you might want to set it to "1.2.3-beta.1" or something similar.
+
+```sh
+{
+  "name": "my-module",
+  "version": "1.2.3-beta.1",
+  "publishConfig": {
+     "access": "public",
+     "tag": "beta"
+   }
+  ...
+}
+```
+
+To commit this to GitHub, you would run the following commands:
+
+```sh
+git add .
+git commit -m "Prepare release v1.2.3"
+git push origin main
+```
+
+At this point, you have committed your changes to the local repository and pushed them to GitHub. You can also use a GUI like Git Tower to do this.
+
+## Step 2: Create a git tag and push it to Github
+
+Next, you need to create a tag for the release. To trigger the NPM publishing process, you need to create a tag that begins with "v" followed by the version number. For example, if you are releasing version 1.2.3 of your module, you would create a tag called "v1.2.3". The reason for this is that the trigger in the `build.yml` file is looking for a tag that begins with "v" followed by the version number. This is a common convention in the Git community and is used by many projects.
+
+You can create a tag by running the following command:
 
 ```sh
 git tag v1.2.3
+```
+
+This will create a tag called "v1.2.3" in your local repository.
+
+Next, you need to push the tag to GitHub. You can do this by running the following command:
+
+```sh
 git push origin v1.2.3
 ```
 
-You can also tag releases with a GUI like Git Tower and pushe them to GitHub.
+This will push the tag to GitHub and trigger the NPM publishing process.
 
 ### Testing your npm package
 
-To test your npm package before publishing it, you can use the `npm pack` command. This will create a tarball of your package that you can use to test the package before publishing it to NPM.
+To test your npm package before publishing it, you can use the `npm pack --dry-run` command. No actual tarball will be created, but you will see the contents of the package that would be created if you were to publish it. You can expect output similar to the following:
 
 ```sh
 npm pack --dry-run
 
 npm notice
-npm notice 📦  my-module@1.0.0
-npm notice === Tarball Contents ===
-npm notice 1.2kB  package.json
-npm notice 1.1kB  README.md
-npm notice 3.4kB  dist/my-module.umd.js
-npm notice 3.3kB  dist/my-module.es.js
-npm notice 0.6kB  dist/my-module.d.ts
-npm notice === Tarball Details ===
-npm notice name:          my-module
-npm notice version:       1.0.0
-npm notice total files:   5
+npm notice 📦  @my-org/my-module@1.2.3
+npm notice Tarball Contents
+npm notice 9.2kB README.md
+npm notice 170B dist/my-module.d.ts
+npm notice 193B dist/my-module.d.ts.map
+npm notice 703B dist/my-module.es.js
+npm notice 1.1kB dist/my-module.umd.js
+npm notice 2.0kB package.json
+npm notice Tarball Details
+npm notice name: @my-org/my-module
+npm notice version: 1.2.3
+npm notice filename: my-org-my-module-1.2.3.tgz
+npm notice package size: 4.7 kB
+npm notice unpacked size: 13.3 kB
+npm notice shasum: 8090b323f3959194fe7b3e6e0b7cc2f9941cbfae
+npm notice integrity: sha512-PrSdR4qWeScTZ[...]ZyMYU/GG8w0eA==
+npm notice total files: 6
 npm notice
+my-org-my-module-1.2.3.tgz
 ```
 
-To view the contents of the package that will be published, run the following command:
+To view the actual file that will be created, simply leave off the `--dry-run` flag.
 
 ```sh
 npm pack
@@ -109,7 +195,7 @@ This will create a .tgz file in the current directory. You can then extract this
 
 ### Organizational repos
 
-Organizational packages default to private. If you want them public, you need to add an additional `--access public` flag to the publish command. You can do this by adding the following line to your `package.json` file:
+Organizational packages default to private. If you want them public, you need to add an additional `--access public` flag to the publish command. This build system assumes your published package will be public. Note this setting in the `package.json` file:
 
 ```json
 "publishConfig": {
