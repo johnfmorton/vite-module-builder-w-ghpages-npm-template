@@ -314,4 +314,4 @@ https://github.com/johnfmorton/progressive-share-button
 
 MIT License — use, modify, and distribute as you like.
 
-If you find this useful, a link back is always appreciated!
+Feedback and contributions are welcome! If you find this template useful, consider giving it a star on GitHub. Happy coding!
