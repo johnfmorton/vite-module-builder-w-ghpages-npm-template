@@ -169,7 +169,7 @@ rl.question(
                 const gitRepoRegex = new RegExp(GIT_URL, 'g')
 
                 // Replace all instances of 'REPLACE_ME' with the user-supplied replacement text
-                const updatedContent = content.replace(
+                let updatedContent = content.replace(
                     fileNameRegex,
                     replacementText
                 )
@@ -234,7 +234,12 @@ rl.question(
 `
             console.log('')
             // Log a message indicating the setup is complete
-            console.log(colours.bg.blue + colours.fg.white + successMessage)
+            console.log(
+                colours.bg.blue +
+                    colours.fg.white +
+                    successMessage +
+                    colours.reset
+            )
         })
     }
 )
