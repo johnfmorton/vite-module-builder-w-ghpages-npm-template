@@ -174,6 +174,19 @@ rl.question(
                     replacementText
                 )
 
+                // Check if this is the package.json file
+                if (file === 'package.json') {
+                    // Use a regex to match the version line.
+                    // The regex captures:
+                    //  - $1: the beginning portion ("version":")
+                    //  - $2: the current version (any string inside the quotes)
+                    //  - $3: the closing part (",)
+                    updatedContent = updatedContent.replace(
+                        /("version":\s*")([^"]+)(",)/,
+                        '$1' + '1.0.0' + '$3'
+                    )
+                }
+
                 // Replace all instances of 'GIT_URL' with the user-supplied Git repo URL
                 const finalContent = updatedContent.replace(
                     gitRepoRegex,
@@ -215,6 +228,8 @@ rl.question(
 *                                                  *
 * npm run dev                                      *
 *                                                  *
+* Reminder: Update the README.md file with your     *
+* project details. Also review the package.json    *
 ****************************************************
 `
             console.log('')
