@@ -4,7 +4,7 @@
 import ModuleDemoPage from '../lib/vite-module-builder-w-ghpages-npm-template'
 ModuleDemoPage.init('Success! The module is working.')
 
-import './style.pcss';
+import './style.css';
 
 // From here, you can add any additional JavaScript you want to run on the demo page.
 // For example, you could add a button that calls a function in the module.
