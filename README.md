@@ -1,7 +1,7 @@
 # Vite Module Builder Template
 
-[![Build & Publish](https://github.com/your-org/your-repo/actions/workflows/build.yml/badge.svg)](https://github.com/your-org/your-repo/actions/workflows/build.yml)
-[![GitHub Pages](https://github.com/your-org/your-repo/actions/workflows/ghpages.yml/badge.svg)](https://your-username.gitHub.io/your-repo/)
+[![Publish to NPM](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/build.yml/badge.svg)](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/build.yml)
+[![Deploy static content to Pages](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/ghpages.yaml/badge.svg)](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/ghpages.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A modern Vite-based module builder template with automated publishing to both **GitHub Pages** (for demos) and **NPM** (for distribution).
