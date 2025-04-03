@@ -312,6 +312,6 @@ https://github.com/johnfmorton/progressive-share-button
 
 ## 📄 License
 
-MIT License — use, modify, and distribute as you like.
+[MIT License](LICENSE)
 
 Feedback and contributions are welcome! If you find this template useful, consider giving it a star on GitHub. Happy coding!
