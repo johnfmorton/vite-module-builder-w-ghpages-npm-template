@@ -129,7 +129,7 @@ const files = [
     'README.md',
     'vite.config.js',
     'vite.demo.config.js',
-    'demo-page-assets/demo.ts',
+    'demo/assets/demo.ts',
     // 'lib/vite-module-builder-w-ghpages-npm-template.ts',
 ]
 
