@@ -134,112 +134,122 @@ function validateGitRepoUrl(gitRepoUrl) {
     return true
 }
 
-// Prompt the user for the replacement text
-rl.question(
-    'Enter your projet name: (lowercase, no spaces, at least one hyphen, may include numbers, must start with a letter): ',
-    (replacementText) => {
-        // Validate the replacement text
-        const valid1 = validateReplacementText(replacementText)
-        if (!valid1) {
-            // If the validation fails, close the readline interface and exit
-            rl.close()
-            process.exitCode = 1
+// Create a function to handle the module name prompt
+function promptForModuleName() {
+    rl.question(
+        'Enter your project name: (lowercase, no spaces, at least one hyphen, may include numbers, must start with a letter): ',
+        (replacementText) => {
+            // Validate the replacement text
+            const valid = validateReplacementText(replacementText)
+            if (!valid) {
+                console.log(colours.fg.yellow + 'Please try again.' + colours.reset)
+                // Instead of exiting, recursively prompt again
+                promptForModuleName()
+                return
+            }
+            // If valid, proceed to git URL prompt
+            promptForGitUrl(replacementText)
+        }
+    )
+}
+
+// Create a function to handle the git URL prompt
+function promptForGitUrl(replacementText) {
+    rl.question('Enter your Git repo URL: ', (gitRepoUrl) => {
+        // Validate the Git repo URL
+        const valid = validateGitRepoUrl(gitRepoUrl)
+        if (!valid) {
+            console.log(colours.fg.yellow + 'Please try again.' + colours.reset)
+            // Instead of exiting, recursively prompt again
+            promptForGitUrl(replacementText)
             return
         }
 
-        // Prompt the user for the Git repo URL
-        rl.question('Enter your Git repo URL: ', (gitRepoUrl) => {
-            // Validate the Git repo URL
-            const valid2 = validateGitRepoUrl(gitRepoUrl)
-            if (!valid2) {
-                // If the validation fails, close the readline interface and exit
-                rl.close()
-                process.exitCode = 1
-                return
+        // If valid, proceed with file updates
+        processFiles(replacementText, gitRepoUrl)
+    })
+}
+
+// Create a function to handle file processing
+function processFiles(replacementText, gitRepoUrl) {
+    // Loop through each file in the files array
+    files.forEach((file) => {
+        try {
+            // Read the contents of the file
+            const content = fs.readFileSync(file, 'utf8')
+
+            // create a regex to match the replacement text
+            const fileNameRegex = new RegExp(REPLACE_ME, 'g')
+            const gitRepoRegex = new RegExp(GIT_URL, 'g')
+
+            // Replace all instances of 'REPLACE_ME' with the user-supplied replacement text
+            let updatedContent = content.replace(fileNameRegex, replacementText)
+
+            // Check if this is the package.json file
+            if (file === 'package.json') {
+                updatedContent = updatedContent.replace(
+                    /("version":\s*")([^"]+)(",)/,
+                    '$1' + '1.0.0' + '$3'
+                )
             }
 
-            // Loop through each file in the files array
-            files.forEach((file) => {
-                // Read the contents of the file
-                const content = fs.readFileSync(file, 'utf8')
+            // Replace all instances of 'GIT_URL' with the user-supplied Git repo URL
+            const finalContent = updatedContent.replace(gitRepoRegex, gitRepoUrl)
 
-                // create a regex to match the replacement text
-                const fileNameRegex = new RegExp(REPLACE_ME, 'g')
+            // Write the final content back to the file
+            fs.writeFileSync(file, finalContent, 'utf8')
 
-                const gitRepoRegex = new RegExp(GIT_URL, 'g')
+            console.log(
+                colours.bg.green,
+                colours.fg.white,
+                `Updated ${file} `
+            )
+        } catch (error) {
+            console.error(
+                colours.bg.red,
+                colours.fg.white,
+                `Error processing ${file}: ${error.message}`
+            )
+        }
+    })
 
-                // Replace all instances of 'REPLACE_ME' with the user-supplied replacement text
-                let updatedContent = content.replace(
-                    fileNameRegex,
-                    replacementText
-                )
+    // Handle file renaming
+    const fileDirecotry = 'lib/'
+    const fileToRename = `${REPLACE_ME}.ts`
+    const extname = path.extname(fileToRename)
+    const oldFilePath = path.join(fileDirecotry, fileToRename)
+    const newFilePath = path.join(fileDirecotry, replacementText + extname)
 
-                // Check if this is the package.json file
-                if (file === 'package.json') {
-                    // Use a regex to match the version line.
-                    // The regex captures:
-                    //  - $1: the beginning portion ("version":")
-                    //  - $2: the current version (any string inside the quotes)
-                    //  - $3: the closing part (",)
-                    updatedContent = updatedContent.replace(
-                        /("version":\s*")([^"]+)(",)/,
-                        '$1' + '1.0.0' + '$3'
-                    )
-                }
+    fs.rename(oldFilePath, newFilePath, function (err) {
+        if (err) {
+            console.error(
+                colours.bg.red,
+                colours.fg.white,
+                `Error renaming file: ${err.message}`
+            )
+        }
+        rl.close()
 
-                // Replace all instances of 'GIT_URL' with the user-supplied Git repo URL
-                const finalContent = updatedContent.replace(
-                    gitRepoRegex,
-                    gitRepoUrl
-                )
-
-                // Write the final content back to the file
-                fs.writeFileSync(file, finalContent, 'utf8')
-
-                // Log a message indicating the file was updated
-                console.log(
-                    colours.bg.green,
-                    colours.fg.white,
-                    `Updated ${file} `
-                )
-            })
-
-            // Close the readline interface
-            rl.close()
-
-            const fileDirecotry = 'lib/'
-            const fileToRename = `${REPLACE_ME}.ts` // the file to rename
-            const extname = path.extname(fileToRename)
-            const oldFilePath = path.join(fileDirecotry, fileToRename) // create the old file path
-            const newFilePath = path.join(
-                fileDirecotry,
-                replacementText + extname
-            ) // create the new file path with the new filename and same extension
-
-            fs.rename(oldFilePath, newFilePath, function (err) {
-                if (err) throw err
-                // console.log('File renamed successfully!')
-                rl.close()
-            })
-            const successMessage = `
+        const successMessage = `
 ****************************************************
-* Setup complete. Happy coding!                    *
-* To get started, run the following command:       *
-*                                                  *
-* npm run dev                                      *
-*                                                  *
+* Setup complete. Happy coding!                     *
+* To get started, run the following command:        *
+*                                                   *
+* npm run dev                                       *
+*                                                   *
 * Reminder: Update the README.md file with your     *
-* project details. Also review the package.json    *
+* project details. Also review the package.json     *
 ****************************************************
 `
-            console.log('')
-            // Log a message indicating the setup is complete
-            console.log(
-                colours.bg.blue +
-                    colours.fg.white +
-                    successMessage +
-                    colours.reset
-            )
-        })
-    }
-)
+        console.log('')
+        console.log(
+            colours.bg.blue +
+                colours.fg.white +
+                successMessage +
+                colours.reset
+        )
+    })
+}
+
+// Start the prompt chain
+promptForModuleName()
