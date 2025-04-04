@@ -42,6 +42,39 @@ const REPLACE_ME = 'vite-module-builder-w-ghpages-npm-template'
 const GIT_URL =
     'https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template'
 
+// Parse the package.json to get default author info
+const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
+const authorRegex = /^(.*?)\s*(?:<([^>]+)>)?\s*(?:\((.*?)\))?$/
+const authorMatch = authorRegex.exec(packageJson.author || '')
+const defaultAuthor = {
+    name: authorMatch ? authorMatch[1].trim() : '',
+    email: authorMatch ? authorMatch[2] || '' : '',
+    website: authorMatch ? authorMatch[3] || '' : ''
+}
+
+// Validation functions for author information
+function validateEmail(email) {
+    if (!email) return true // Allow empty email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+        console.log(colours.bg.red + colours.fg.white + 'ERROR: Invalid email format.')
+        return false
+    }
+    return true
+}
+
+function validateWebsite(website) {
+    if (!website) return true // Allow empty website
+    try {
+        new URL(website)
+        return true
+    } catch {
+        console.log(colours.bg.red + colours.fg.white + 'ERROR: Invalid website URL.')
+        return false
+    }
+    return true
+}
+
 // Array of file paths to search and replace
 const files = [
     'index.html',
@@ -153,7 +186,40 @@ function promptForModuleName() {
     )
 }
 
-// Create a function to handle the git URL prompt
+// Create a function to handle the author name prompt
+function promptForAuthorName(replacementText, gitRepoUrl) {
+    rl.question(`Enter your name (press Enter to use default: ${defaultAuthor.name}): `, (name) => {
+        const authorName = name.trim() || defaultAuthor.name
+        promptForAuthorEmail(replacementText, gitRepoUrl, authorName)
+    })
+}
+
+// Create a function to handle the author email prompt
+function promptForAuthorEmail(replacementText, gitRepoUrl, authorName) {
+    rl.question(`Enter your email (press Enter to use default: ${defaultAuthor.email}): `, (email) => {
+        const authorEmail = email.trim() || defaultAuthor.email
+        if (!validateEmail(authorEmail)) {
+            promptForAuthorEmail(replacementText, gitRepoUrl, authorName)
+            return
+        }
+        promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail)
+    })
+}
+
+// Create a function to handle the author website prompt
+function promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail) {
+    rl.question(`Enter your website (press Enter to use default: ${defaultAuthor.website}): `, (website) => {
+        const authorWebsite = website.trim() || defaultAuthor.website
+        if (!validateWebsite(authorWebsite)) {
+            promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail)
+            return
+        }
+        const authorString = `${authorName}${authorEmail ? ` <${authorEmail}>` : ''}${authorWebsite ? ` (${authorWebsite})` : ''}`
+        processFiles(replacementText, gitRepoUrl, authorString)
+    })
+}
+
+// Modify the promptForGitUrl function to chain to the new author prompts
 function promptForGitUrl(replacementText) {
     rl.question('Enter your Git repo URL: ', (gitRepoUrl) => {
         // Validate the Git repo URL
@@ -165,13 +231,13 @@ function promptForGitUrl(replacementText) {
             return
         }
 
-        // If valid, proceed with file updates
-        processFiles(replacementText, gitRepoUrl)
+        // If valid, proceed with author information prompts
+        promptForAuthorName(replacementText, gitRepoUrl)
     })
 }
 
 // Create a function to handle file processing
-function processFiles(replacementText, gitRepoUrl) {
+function processFiles(replacementText, gitRepoUrl, authorString) {
     // Loop through each file in the files array
     files.forEach((file) => {
         try {
@@ -190,6 +256,11 @@ function processFiles(replacementText, gitRepoUrl) {
                 updatedContent = updatedContent.replace(
                     /("version":\s*")([^"]+)(",)/,
                     '$1' + '1.0.0' + '$3'
+                )
+                // Update the author field
+                updatedContent = updatedContent.replace(
+                    /("author":\s*")([^"]+)(",)/,
+                    '$1' + authorString + '$3'
                 )
             }
 
