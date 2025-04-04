@@ -39,17 +39,52 @@ const colours = {
 }
 
 const REPLACE_ME = 'vite-module-builder-w-ghpages-npm-template'
-const GIT_URL =
-    'https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template'
+const GIT_URL = 'https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template'
+const GITHUB_PAGES_URL = 'https://johnfmorton.github.io/vite-module-builder-w-ghpages-npm-template/'
 
 // Parse the package.json to get default author info
 const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
-const authorRegex = /^(.*?)\s*(?:<([^>]+)>)?\s*(?:\((.*?)\))?$/
+const authorRegex = /^(.*?)\s*(?:<([^"]+)>)?\s*(?:\((.*?)\))?$/
 const authorMatch = authorRegex.exec(packageJson.author || '')
 const defaultAuthor = {
     name: authorMatch ? authorMatch[1].trim() : '',
     email: authorMatch ? authorMatch[2] || '' : '',
     website: authorMatch ? authorMatch[3] || '' : ''
+}
+
+// Function to construct GitHub URLs
+function constructGitHubUrls(username, projectName) {
+    return {
+        repoUrl: `https://github.com/${username}/${projectName}`,
+        pagesUrl: `https://${username}.github.io/${projectName}/`
+    }
+}
+
+// Function to update GitHub-related URLs in files
+function updateGitHubUrls(files, oldRepoUrl, newRepoUrl, oldPagesUrl, newPagesUrl) {
+    files.forEach(file => {
+        if (fs.existsSync(file)) {
+            let content = fs.readFileSync(file, 'utf8')
+            content = content.replace(new RegExp(oldRepoUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), newRepoUrl)
+            content = content.replace(new RegExp(oldPagesUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), newPagesUrl)
+            fs.writeFileSync(file, content, 'utf8')
+        }
+    })
+}
+
+// Validation functions
+function validateGitHubUsername(username) {
+    // GitHub username requirements:
+    // - Only alphanumeric characters or hyphens
+    // - Cannot have multiple consecutive hyphens
+    // - Cannot begin or end with a hyphen
+    // - Maximum is 39 characters
+    const githubUsernameRegex = /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9])){0,38}$/
+    if (!githubUsernameRegex.test(username)) {
+        console.log(colours.bg.red + colours.fg.white + 'ERROR: Invalid GitHub username format.')
+        return false
+    }
+    return true
 }
 
 // Validation functions for author information
@@ -167,21 +202,52 @@ function validateGitRepoUrl(gitRepoUrl) {
     return true
 }
 
-// Create a function to handle the module name prompt
+// Create a function to handle the GitHub username prompt
+function promptForGitHubUsername(replacementText) {
+    rl.question('Enter your GitHub username: ', (username) => {
+        if (!validateGitHubUsername(username)) {
+            console.log(colours.fg.yellow + 'Please try again.' + colours.reset)
+            promptForGitHubUsername(replacementText)
+            return
+        }
+
+        const urls = constructGitHubUrls(username, replacementText)
+        console.log(colours.fg.cyan + '\nBased on your input, we will use:')
+        console.log(`Repository URL: ${urls.repoUrl}`)
+        console.log(`GitHub Pages URL: ${urls.pagesUrl}\n` + colours.reset)
+
+        rl.question('Is this correct? (Y/n): ', (answer) => {
+            if (answer.toLowerCase() === 'n') {
+                promptForGitHubUsername(replacementText)
+                return
+            }
+
+            // Update GitHub-related URLs in files
+            updateGitHubUrls(
+                ['README.md', 'vite.demo.config.js'],
+                GIT_URL,
+                urls.repoUrl,
+                GITHUB_PAGES_URL,
+                urls.pagesUrl
+            )
+
+            promptForAuthorName(replacementText, urls.repoUrl)
+        })
+    })
+}
+
+// Modify the promptForModuleName function to chain to GitHub username prompt
 function promptForModuleName() {
     rl.question(
         'Enter your project name: (lowercase, no spaces, at least one hyphen, may include numbers, must start with a letter): ',
         (replacementText) => {
-            // Validate the replacement text
             const valid = validateReplacementText(replacementText)
             if (!valid) {
                 console.log(colours.fg.yellow + 'Please try again.' + colours.reset)
-                // Instead of exiting, recursively prompt again
                 promptForModuleName()
                 return
             }
-            // If valid, proceed to git URL prompt
-            promptForGitUrl(replacementText)
+            promptForGitHubUsername(replacementText)
         }
     )
 }
@@ -216,23 +282,6 @@ function promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorE
         }
         const authorString = `${authorName}${authorEmail ? ` <${authorEmail}>` : ''}${authorWebsite ? ` (${authorWebsite})` : ''}`
         processFiles(replacementText, gitRepoUrl, authorString)
-    })
-}
-
-// Modify the promptForGitUrl function to chain to the new author prompts
-function promptForGitUrl(replacementText) {
-    rl.question('Enter your Git repo URL: ', (gitRepoUrl) => {
-        // Validate the Git repo URL
-        const valid = validateGitRepoUrl(gitRepoUrl)
-        if (!valid) {
-            console.log(colours.fg.yellow + 'Please try again.' + colours.reset)
-            // Instead of exiting, recursively prompt again
-            promptForGitUrl(replacementText)
-            return
-        }
-
-        // If valid, proceed with author information prompts
-        promptForAuthorName(replacementText, gitRepoUrl)
     })
 }
 
