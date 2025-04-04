@@ -352,13 +352,17 @@ function processFiles(replacementText, gitRepoUrl, authorString) {
 
         const successMessage = `
 ****************************************************
-* Setup complete. Happy coding!                     *
-* To get started, run the following command:        *
-*                                                   *
-* npm run dev                                       *
-*                                                   *
-* Reminder: Update the README.md file with your     *
-* project details. Also review the package.json     *
+* ⚠️  IMPORTANT: DISABLE GITHUB ACTIONS NOW         *
+* Go to your repository Settings → Actions and      *
+* disable actions before making any commits.        *
+*                                                  *
+* Setup complete. To get started:                  *
+* 1. Disable GitHub Actions in repo settings       *
+* 2. Run: npm run dev                             *
+*                                                  *
+* You can re-enable Actions after setting up:      *
+* - NPM tokens                                     *
+* - GitHub Pages settings                          *
 ****************************************************
 `
         console.log('')
