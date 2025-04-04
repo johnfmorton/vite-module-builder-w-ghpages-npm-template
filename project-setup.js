@@ -354,13 +354,13 @@ function processFiles(replacementText, gitRepoUrl, authorString) {
 
         const successMessage = `
 ****************************************************
-* ⚠️  IMPORTANT: DISABLE GITHUB ACTIONS NOW         *
-* Go to your repository Settings → Actions and      *
-* disable actions before making any commits.        *
+* ⚠️  IMPORTANT: DISABLE GITHUB ACTIONS NOW        *
+* Go to your repository Actions tag and disable    *
+* workflows before making any commits.             *
 *                                                  *
 * Setup complete. To get started:                  *
 * 1. Disable GitHub Actions in repo settings       *
-* 2. Run: npm run dev                             *
+* 2. Run: npm run dev                              *
 *                                                  *
 * You can re-enable Actions after setting up:      *
 * - NPM tokens                                     *
