@@ -8,7 +8,7 @@ and this project adheres to
 
 ## [Unreleased]
 
-## [2.0.0-next] - 2025-04-03
+## [2.0.0] - 2025-04-04
 
 - Updated the demo site to use the latest version of Tailwind CSS (^4.1.1)
 - Major rewrite to no longer require the `dist` directory to be in the repo
