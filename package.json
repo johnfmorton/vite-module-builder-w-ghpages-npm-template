@@ -18,7 +18,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template"
+        "url": "git+https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template.git"
     },
     "module": "./dist/vite-module-builder-w-ghpages-npm-template.es.js",
     "browser": "./dist/vite-module-builder-w-ghpages-npm-template.umd.js",

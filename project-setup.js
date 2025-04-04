@@ -45,7 +45,7 @@ const colours = {
 }
 
 const REPLACE_ME = 'vite-module-builder-w-ghpages-npm-template'
-const GIT_URL = 'https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template'
+const GIT_URL = 'git+https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template.git'
 const GITHUB_PAGES_URL = 'https://johnfmorton.github.io/vite-module-builder-w-ghpages-npm-template/'
 
 // Parse the package.json to get default author info
@@ -61,7 +61,7 @@ const defaultAuthor = {
 // Function to construct GitHub URLs
 function constructGitHubUrls(username, projectName) {
     return {
-        repoUrl: `https://github.com/${username}/${projectName}`,
+        repoUrl: `git+https://github.com/${username}/${projectName}.git`,
         pagesUrl: `https://${username}.github.io/${projectName}/`,
     }
 }
