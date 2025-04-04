@@ -49,24 +49,30 @@ const authorMatch = authorRegex.exec(packageJson.author || '')
 const defaultAuthor = {
     name: authorMatch ? authorMatch[1].trim() : '',
     email: authorMatch ? authorMatch[2] || '' : '',
-    website: authorMatch ? authorMatch[3] || '' : ''
+    website: authorMatch ? authorMatch[3] || '' : '',
 }
 
 // Function to construct GitHub URLs
 function constructGitHubUrls(username, projectName) {
     return {
         repoUrl: `https://github.com/${username}/${projectName}`,
-        pagesUrl: `https://${username}.github.io/${projectName}/`
+        pagesUrl: `https://${username}.github.io/${projectName}/`,
     }
 }
 
 // Function to update GitHub-related URLs in files
 function updateGitHubUrls(files, oldRepoUrl, newRepoUrl, oldPagesUrl, newPagesUrl) {
-    files.forEach(file => {
+    files.forEach((file) => {
         if (fs.existsSync(file)) {
             let content = fs.readFileSync(file, 'utf8')
-            content = content.replace(new RegExp(oldRepoUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), newRepoUrl)
-            content = content.replace(new RegExp(oldPagesUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), newPagesUrl)
+            content = content.replace(
+                new RegExp(oldRepoUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+                newRepoUrl
+            )
+            content = content.replace(
+                new RegExp(oldPagesUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+                newPagesUrl
+            )
             fs.writeFileSync(file, content, 'utf8')
         }
     })
@@ -132,9 +138,7 @@ function validateReplacementText(replacementText) {
     // Check if the replacement text is lowercase
     if (replacementText !== replacementText.toLowerCase()) {
         console.log(
-            colours.bg.red +
-                colours.fg.white +
-                'ERROR: Replacement text must be lowercase.'
+            colours.bg.red + colours.fg.white + 'ERROR: Replacement text must be lowercase.'
         )
         return false
     }
@@ -142,9 +146,7 @@ function validateReplacementText(replacementText) {
     // Check if the replacement text contains any spaces
     if (replacementText.includes(' ')) {
         console.log(
-            colours.bg.red +
-                colours.fg.white +
-                'ERROR: Replacement text cannot contain spaces.'
+            colours.bg.red + colours.fg.white + 'ERROR: Replacement text cannot contain spaces.'
         )
         return false
     }
@@ -162,9 +164,7 @@ function validateReplacementText(replacementText) {
     // Check if the replacement text starts with a letter
     if (!/^[a-z]/.test(replacementText)) {
         console.log(
-            colours.bg.red +
-                colours.fg.white +
-                'ERROR: Replacement text must start with a letter.'
+            colours.bg.red + colours.fg.white + 'ERROR: Replacement text must start with a letter.'
         )
         return false
     }
@@ -191,9 +191,7 @@ function validateGitRepoUrl(gitRepoUrl) {
     // Check if the hostname is present
     if (!parsedUrl.hostname) {
         console.log(
-            colours.bg.red +
-                colours.fg.white +
-                'ERROR: Invalid Git repo URL: missing hostname.'
+            colours.bg.red + colours.fg.white + 'ERROR: Invalid Git repo URL: missing hostname.'
         )
         return false
     }
@@ -262,27 +260,33 @@ function promptForAuthorName(replacementText, gitRepoUrl) {
 
 // Create a function to handle the author email prompt
 function promptForAuthorEmail(replacementText, gitRepoUrl, authorName) {
-    rl.question(`Enter your email (press Enter to use default: ${defaultAuthor.email}): `, (email) => {
-        const authorEmail = email.trim() || defaultAuthor.email
-        if (!validateEmail(authorEmail)) {
-            promptForAuthorEmail(replacementText, gitRepoUrl, authorName)
-            return
+    rl.question(
+        `Enter your email (press Enter to use default: ${defaultAuthor.email}): `,
+        (email) => {
+            const authorEmail = email.trim() || defaultAuthor.email
+            if (!validateEmail(authorEmail)) {
+                promptForAuthorEmail(replacementText, gitRepoUrl, authorName)
+                return
+            }
+            promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail)
         }
-        promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail)
-    })
+    )
 }
 
 // Create a function to handle the author website prompt
 function promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail) {
-    rl.question(`Enter your website (press Enter to use default: ${defaultAuthor.website}): `, (website) => {
-        const authorWebsite = website.trim() || defaultAuthor.website
-        if (!validateWebsite(authorWebsite)) {
-            promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail)
-            return
+    rl.question(
+        `Enter your website (press Enter to use default: ${defaultAuthor.website}): `,
+        (website) => {
+            const authorWebsite = website.trim() || defaultAuthor.website
+            if (!validateWebsite(authorWebsite)) {
+                promptForAuthorWebsite(replacementText, gitRepoUrl, authorName, authorEmail)
+                return
+            }
+            const authorString = `${authorName}${authorEmail ? ` <${authorEmail}>` : ''}${authorWebsite ? ` (${authorWebsite})` : ''}`
+            processFiles(replacementText, gitRepoUrl, authorString)
         }
-        const authorString = `${authorName}${authorEmail ? ` <${authorEmail}>` : ''}${authorWebsite ? ` (${authorWebsite})` : ''}`
-        processFiles(replacementText, gitRepoUrl, authorString)
-    })
+    )
 }
 
 // Create a function to handle file processing
@@ -319,11 +323,7 @@ function processFiles(replacementText, gitRepoUrl, authorString) {
             // Write the final content back to the file
             fs.writeFileSync(file, finalContent, 'utf8')
 
-            console.log(
-                colours.bg.green,
-                colours.fg.white,
-                `Updated ${file} `
-            )
+            console.log(colours.bg.green, colours.fg.white, `Updated ${file} `)
         } catch (error) {
             console.error(
                 colours.bg.red,
@@ -342,11 +342,7 @@ function processFiles(replacementText, gitRepoUrl, authorString) {
 
     fs.rename(oldFilePath, newFilePath, function (err) {
         if (err) {
-            console.error(
-                colours.bg.red,
-                colours.fg.white,
-                `Error renaming file: ${err.message}`
-            )
+            console.error(colours.bg.red, colours.fg.white, `Error renaming file: ${err.message}`)
         }
         rl.close()
 
@@ -366,12 +362,7 @@ function processFiles(replacementText, gitRepoUrl, authorString) {
 ****************************************************
 `
         console.log('')
-        console.log(
-            colours.bg.blue +
-                colours.fg.white +
-                successMessage +
-                colours.reset
-        )
+        console.log(colours.bg.blue + colours.fg.white + successMessage + colours.reset)
     })
 }
 

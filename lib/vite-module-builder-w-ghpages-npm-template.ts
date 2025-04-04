@@ -4,13 +4,12 @@
 // Use `output.exports: "named"` to disable this warning.
 
 function init(message: string): void {
-  console.log(message);
-  const messageOutputElement = document.getElementById("messageOutput");
-  if (messageOutputElement) {
-    messageOutputElement.innerHTML = message;
-  }
-
+    console.log(message)
+    const messageOutputElement = document.getElementById('messageOutput')
+    if (messageOutputElement) {
+        messageOutputElement.innerHTML = message
+    }
 }
 export default {
-  init: init
+    init: init,
 }

@@ -1,23 +1,21 @@
 {
-  "compilerOptions": {
-    "target": "ES6",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ES6", "DOM", "DOM.Iterable"],
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node",
-    "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "noEmit": false, // this project uses TypeScript to generate the type definitions
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "skipLibCheck": true
-  },
-  "include": ["src", "lib"],
-  "exclude": [
-    "node_modules"
-  ]
+    "compilerOptions": {
+        "target": "ES6",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": ["ES6", "DOM", "DOM.Iterable"],
+        "forceConsistentCasingInFileNames": true,
+        "moduleResolution": "Node",
+        "strict": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "noEmit": false, // this project uses TypeScript to generate the type definitions
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "skipLibCheck": true
+    },
+    "include": ["src", "lib"],
+    "exclude": ["node_modules"]
 }

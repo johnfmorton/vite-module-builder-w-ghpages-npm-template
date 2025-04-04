@@ -4,7 +4,8 @@
 [![Deploy static content to Pages](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/ghpages.yaml/badge.svg)](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/ghpages.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A modern Vite-based module builder template with automated publishing to both **GitHub Pages** (for demos) and **NPM** (for distribution).
+A modern Vite-based module builder template with automated publishing to both
+**GitHub Pages** (for demos) and **NPM** (for distribution).
 
 - 📦 Output: ES, CommonJS, and UMD formats
 - 🧪 Demo page with Tailwind CSS
@@ -48,7 +49,8 @@ A modern Vite-based module builder template with automated publishing to both **
 
 ## 🧰 Overview
 
-This repo is a starter workflow for building and publishing JavaScript modules with Vite. It:
+This repo is a starter workflow for building and publishing JavaScript modules
+with Vite. It:
 
 - Supports **ESM**, **CommonJS**, and **UMD** outputs
 - Includes a demo page with Tailwind CSS (not bundled in the module)
@@ -63,7 +65,8 @@ Great for creating standalone libraries, custom elements, or utility modules.
 
 ### Use as a Template
 
-Click "Use this template" on the GitHub repo homepage to create a new repo under your GitHub account.
+Click "Use this template" on the GitHub repo homepage to create a new repo under
+your GitHub account.
 
 ### Setup Script
 
@@ -78,9 +81,12 @@ You'll be prompted for:
 - The module name (e.g., `my-module-name`)
 - The GitHub Pages base URL (e.g., `https://<USERNAME>.gitHub.io/<REPO>/`)
 
-This updates filenames, `package.json`, and `vite.demo.config.js`. It also runs `npm install`.
+This updates filenames, `package.json`, and `vite.demo.config.js`. It also runs
+`npm install`.
 
-You will see a reminder to [turn off your GitHub actions](#how-to-disable-the-github-pages-and-npm-publishing) at this point. You can re-enable them when you are ready.
+You will see a reminder to
+[turn off your GitHub actions](#how-to-disable-the-github-pages-and-npm-publishing)
+at this point. You can re-enable them when you are ready.
 
 ---
 
@@ -93,12 +99,14 @@ npm run dev
 ```
 
 - Your demo site's HTML and assets are in the `demo` directory.
-- Note of how the library you're working on is included in the `demo.ts` file, `../../lib/`
+- Note of how the library you're working on is included in the `demo.ts` file,
+  `../../lib/`
 - Edit your module in `lib/your-module.ts`
 - Demo script logic lives in `demo/assets/demo.ts`
 - Your demo site will be available at `http://localhost:8888/`
 
-When you are happy with a basic initial version, commit your changes to your local git repo:
+When you are happy with a basic initial version, commit your changes to your
+local git repo:
 
 ```bash
 git add .
@@ -107,13 +115,20 @@ git commit -m "Initial commit"
 
 ## 🛠 Initial setup for GitHub and NPM
 
-Before we push to GitHub, we need to set up the repo for GitHub Pages and NPM publishing.
+Before we push to GitHub, we need to set up the repo for GitHub Pages and NPM
+publishing.
 
 ### Configuring NPM publishing locally
 
-I recommend publishing your initial version to NPM as an alpha version from your local repo. This way, you can test the publishing process and make sure everything works as expected. After you've published at least one, you can also generate a token on the NPM website that is specific to your package. If the package has not been published yet, you will not be able to generate a token specific to the package.
+I recommend publishing your initial version to NPM as an alpha version from your
+local repo. This way, you can test the publishing process and make sure
+everything works as expected. After you've published at least one, you can also
+generate a token on the NPM website that is specific to your package. If the
+package has not been published yet, you will not be able to generate a token
+specific to the package.
 
-First, update your `package.json` file to include the following `publishConfig` section:
+First, update your `package.json` file to include the following `publishConfig`
+section:
 
 ```json
 "publishConfig": {
@@ -122,7 +137,8 @@ First, update your `package.json` file to include the following `publishConfig` 
 },
 ```
 
-Also in the `package.json`, update the version number to something like  `1.0.0-alpha.0`.
+Also in the `package.json`, update the version number to something like
+`1.0.0-alpha.0`.
 
 Build a local version of your package using the following command:
 
@@ -130,15 +146,22 @@ Build a local version of your package using the following command:
 npm run build
 ```
 
-This will create a `dist` folder on your local machine with the built files. The files in the `dist` folder are what will be published to NPM. The files in this directory are excluded from the GitHub repo, so you will not add them to the repo.
+This will create a `dist` folder on your local machine with the built files. The
+files in the `dist` folder are what will be published to NPM. The files in this
+directory are excluded from the GitHub repo, so you will not add them to the
+repo.
 
-I will assume you have already [set up your NPM account](https://docs.npmjs.com/creating-a-new-npm-user-account). Next, log in to NPM from the command line. If you have not done this before, run the following command:
+I will assume you have already
+[set up your NPM account](https://docs.npmjs.com/creating-a-new-npm-user-account).
+Next, log in to NPM from the command line. If you have not done this before, run
+the following command:
 
 ```bash
 npm login
 ```
 
-Once you are logged in, you can publish your package to NPM using the following command:
+Once you are logged in, you can publish your package to NPM using the following
+command:
 
 ```bash
 npm publish --access public --tag alpha
@@ -148,27 +171,39 @@ This will publish your package to NPM with the `alpha` tag.
 
 ### Creating a Personal Access Token for NPM
 
-In your GitHub repo, you will need a key from your NPM repository that will allow you to publish. This will be stored in your GitHub secrets for the repo. In the `.gitHub/workflows/build.yml` file, you will need a reference to it, `secrets.NPM_TOKEN`. If you choose a different name for your secret, you will need to update the workflow file.
+In your GitHub repo, you will need a key from your NPM repository that will
+allow you to publish. This will be stored in your GitHub secrets for the repo.
+In the `.gitHub/workflows/build.yml` file, you will need a reference to it,
+`secrets.NPM_TOKEN`. If you choose a different name for your secret, you will
+need to update the workflow file.
 
 ![NPM Access Tokens](./docs/npm-access-tokens.png)
 
 ### GitHub Secrets
 
-In the repo's settings, you will need to add the secret to the repo. You can do this by going to the repo's settings, then to the "Secrets and variables" section and then select the "Actions" section. Click the "New repository secret" button and add the secret as shown below.
+In the repo's settings, you will need to add the secret to the repo. You can do
+this by going to the repo's settings, then to the "Secrets and variables"
+section and then select the "Actions" section. Click the "New repository secret"
+button and add the secret as shown below.
 
 ![GitHub Secrets](./docs/gh-secrets.png)
 
 ### How to disable the GitHub Pages and NPM publishing
 
-If you don't want to publish your demo page to GitHub Pages or your module to NPM, you can disable the workflows.
+If you don't want to publish your demo page to GitHub Pages or your module to
+NPM, you can disable the workflows.
 
-I do this early in development to prevent these processes from running before I'm ready. You can do this by going to the repo's settings, then to the "Actions" section. Click the "Disable Actions" button as shown below.
+I do this early in development to prevent these processes from running before
+I'm ready. You can do this by going to the repo's settings, then to the
+"Actions" section. Click the "Disable Actions" button as shown below.
 
 ![Disable Actions](./docs/gh-action-disable-workflow.png)
 
-You can re-enable the workflows by clicking the "Enable Actions" button on this same screen when you are ready.
+You can re-enable the workflows by clicking the "Enable Actions" button on this
+same screen when you are ready.
 
-Now that the initial setup is complete, let's run through the build process and publishing to NPM.
+Now that the initial setup is complete, let's run through the build process and
+publishing to NPM.
 
 ---
 
@@ -176,11 +211,11 @@ Now that the initial setup is complete, let's run through the build process and 
 
 The build generates the following outputs by default:
 
-| Format | Type     | Syntax   | Target         |
-|--------|----------|----------|----------------|
-| `es`   | ESM      | `import` | Modern browsers, bundlers |
-| `cjs`  | CommonJS | `require`| Node.js        |
-| `umd`  | UMD      | Global   | Script tag/CDNs|
+| Format | Type     | Syntax    | Target                    |
+| ------ | -------- | --------- | ------------------------- |
+| `es`   | ESM      | `import`  | Modern browsers, bundlers |
+| `cjs`  | CommonJS | `require` | Node.js                   |
+| `umd`  | UMD      | Global    | Script tag/CDNs           |
 
 You can control output formats via `vite.config.js`. Only want ESM?
 
@@ -188,7 +223,9 @@ You can control output formats via `vite.config.js`. Only want ESM?
 formats: ['es']
 ```
 
-If you change the output formats, you will need to update the `package.json` file to include the new formats. The `main` and `module` fields in the `package.json` file should point to the correct files for each format.
+If you change the output formats, you will need to update the `package.json`
+file to include the new formats. The `main` and `module` fields in the
+`package.json` file should point to the correct files for each format.
 
 ### Testing your npm package
 
@@ -203,26 +240,41 @@ npm pack --dry-run
 
 ## 📤 Publishing to NPM
 
-The publishing process has evolved from version 1.0 to 2.0 for a more intentional release workflow. Previously, updating the version in package.json and pushing to GitHub automatically triggered an NPM release. Now, version 2.0 introduces a more deliberate process with tagging.
+The publishing process has evolved from version 1.0 to 2.0 for a more
+intentional release workflow. Previously, updating the version in package.json
+and pushing to GitHub automatically triggered an NPM release. Now, version 2.0
+introduces a more deliberate process with tagging.
 
 ### A primer on tags in Git and NPM
 
 This section is a brief overview of the tagging process in Git and NPM.
 
-Tag exists in both Git and NPM contexts, but they serve different purposes. Let's breakdown clarify the distinction and explain their roles.
+Tag exists in both Git and NPM contexts, but they serve different purposes.
+Let's breakdown clarify the distinction and explain their roles.
 
 ### Git Tags
 
-In Git, a tag is a reference to a specific commit in the repository's history. Git tags are often used to mark important points in the project, such as releases or milestones. They are immutable and serve as a snapshot of the code at that point in time.
+In Git, a tag is a reference to a specific commit in the repository's history.
+Git tags are often used to mark important points in the project, such as
+releases or milestones. They are immutable and serve as a snapshot of the code
+at that point in time.
 
 ### NPM Tags
 
-In NPM, a tag is a label that can be assigned to a specific version of a package. Tags are used to manage different versions of a package and control which version is installed when users run `npm install <package-name>`. The most common tag is "latest," which indicates the most recent stable version of the package.
-When you publish a package to NPM, you can assign it a tag. By default, the latest version is tagged as "latest." However, you can also create custom tags (e.g., "beta," "alpha") to indicate pre-release versions or specific stages of development.
+In NPM, a tag is a label that can be assigned to a specific version of a
+package. Tags are used to manage different versions of a package and control
+which version is installed when users run `npm install <package-name>`. The most
+common tag is "latest," which indicates the most recent stable version of the
+package. When you publish a package to NPM, you can assign it a tag. By default,
+the latest version is tagged as "latest." However, you can also create custom
+tags (e.g., "beta," "alpha") to indicate pre-release versions or specific stages
+of development.
 
 ### Versioning
 
-Versioning is a crucial part of the release process. It helps you keep track of changes and ensures that users can easily identify which version they are using. Let's look at a few examples of versioning your module.
+Versioning is a crucial part of the release process. It helps you keep track of
+changes and ensures that users can easily identify which version they are using.
+Let's look at a few examples of versioning your module.
 
 Update the `package.json` file for a normal (i.e. "latest") release:
 
@@ -245,9 +297,13 @@ For prereleases:
 
 ### Step-by-step
 
-After you've updated the code in your module and have updated your `package.json` file, you are ready to publish your module to NPM.
+After you've updated the code in your module and have updated your
+`package.json` file, you are ready to publish your module to NPM.
 
-Note that we precede the version number with a `v` in the tag name. This is a convention that is used by GitHub to identify tags. The version number should be the same as the version number in your `package.json` file. The `v` also triggers the GitHub Action to publish the module to NPM.
+Note that we precede the version number with a `v` in the tag name. This is a
+convention that is used by GitHub to identify tags. The version number should be
+the same as the version number in your `package.json` file. The `v` also
+triggers the GitHub Action to publish the module to NPM.
 
 The process is as follows:
 
@@ -290,16 +346,16 @@ In early dev, you can disable actions from repo settings → Actions.
 
 ## 🧾 File Structure & Purpose
 
-| File                             | Purpose                              |
-|----------------------------------|--------------------------------------|
-| `lib/your-module.ts`            | Main module source file              |
-| `index.html`                    | Demo/testing UI                      |
-| `demo-page-assets/demo.ts`     | Script for demo logic                |
-| `public/`                       | Static assets                        |
-| `vite.config.js`               | Build config (for publishing)        |
-| `vite.demo.config.js`          | Dev/demo config                      |
-| `.gitHub/workflows/ghpages.yml`| Deploys demo to GitHub Pages         |
-| `.gitHub/workflows/build.yml`  | Publishes package to NPM             |
+| File                            | Purpose                       |
+| ------------------------------- | ----------------------------- |
+| `lib/your-module.ts`            | Main module source file       |
+| `index.html`                    | Demo/testing UI               |
+| `demo-page-assets/demo.ts`      | Script for demo logic         |
+| `public/`                       | Static assets                 |
+| `vite.config.js`                | Build config (for publishing) |
+| `vite.demo.config.js`           | Dev/demo config               |
+| `.gitHub/workflows/ghpages.yml` | Deploys demo to GitHub Pages  |
+| `.gitHub/workflows/build.yml`   | Publishes package to NPM      |
 
 ---
 
@@ -317,4 +373,5 @@ In early dev, you can disable actions from repo settings → Actions.
 
 [MIT License](LICENSE)
 
-Feedback and contributions are welcome! If you find this template useful, consider giving it a star on GitHub. Happy coding!
+Feedback and contributions are welcome! If you find this template useful,
+consider giving it a star on GitHub. Happy coding!
