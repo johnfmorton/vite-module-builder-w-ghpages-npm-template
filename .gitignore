@@ -108,4 +108,3 @@ typings/
 
 # Don't include the dist directory in the repo
 dist
-/package-lock.json
