@@ -98,12 +98,16 @@ Run the dev server:
 npm run dev
 ```
 
+The general workflow is that you'll have a basic HTML page that includes your module. You'll work on the module itself in the `lib` directory.
+
+Here is a overview of the files and locations.
+
+- Work on your module in `lib/your-module.ts` file.
 - Your demo site's HTML and assets are in the `demo` directory.
+- Demo script logic lives in `demo/assets/demo.ts`
 - Note of how the library you're working on is included in the `demo.ts` file,
   `../../lib/`
-- Edit your module in `lib/your-module.ts`
-- Demo script logic lives in `demo/assets/demo.ts`
-- Your demo site will be available at `http://localhost:8888/`
+- Your demo site will be available at `http://localhost:8888/` and will has hot module replacement so you can see your changes as you make them.
 
 When you are happy with a basic initial version, commit your changes to your
 local git repo:
@@ -127,6 +131,8 @@ generate a token on the NPM website that is specific to your package. If the
 package has not been published yet, you will not be able to generate a token
 specific to the package.
 
+**Let's go over this step-by-step.**
+
 First, update your `package.json` file to include the following `publishConfig`
 section:
 
@@ -138,9 +144,9 @@ section:
 ```
 
 Also in the `package.json`, update the version number to something like
-`1.0.0-alpha.0`.
+`1.0.0-alpha.0`. You should also confirm that you have the correct `name` that you intend to publish your module under. For example, I add `@morton-studio/` before the name of my module to have it published under my organization name.
 
-Build a local version of your package using the following command:
+Next, build a local version of your package using the following command:
 
 ```bash
 npm run build
@@ -164,18 +170,22 @@ Once you are logged in, you can publish your package to NPM using the following
 command:
 
 ```bash
-npm publish --access public --tag alpha
+npm publish
 ```
 
 This will publish your package to NPM with the `alpha` tag.
 
+Visit the homepage of your module on NPM to confirm that you see it published.
+
 ### Creating a Personal Access Token for NPM
 
-In your GitHub repo, you will need a key from your NPM repository that will
-allow you to publish. This will be stored in your GitHub secrets for the repo.
+In your GitHub repo, you will need a **Access Token** from your NPM repository that will
+allow you to publish new versions of your module on your behalf. This will be stored in your GitHub secrets for the repo.
 In the `.gitHub/workflows/build.yml` file, you will need a reference to it,
 `secrets.NPM_TOKEN`. If you choose a different name for your secret, you will
 need to update the workflow file.
+
+For added security, I suggest creating a **Granular Access Token** for publishing to only this package. The token will need **Read and write** access.
 
 ![NPM Access Tokens](./docs/npm-access-tokens.png)
 
@@ -184,7 +194,7 @@ need to update the workflow file.
 In the repo's settings, you will need to add the secret to the repo. You can do
 this by going to the repo's settings, then to the "Secrets and variables"
 section and then select the "Actions" section. Click the "New repository secret"
-button and add the secret as shown below.
+button and add the secret as shown below. Use the name `NPM_TOKEN` unless you've changed it in your workflow file.
 
 ![GitHub Secrets](./docs/gh-secrets.png)
 
@@ -300,6 +310,8 @@ For prereleases:
 After you've updated the code in your module and have updated your
 `package.json` file, you are ready to publish your module to NPM.
 
+**If you have disabled your GitHub Actions, turn them back on now.**
+
 Note that we precede the version number with a `v` in the tag name. This is a
 convention that is used by GitHub to identify tags. The version number should be
 the same as the version number in your `package.json` file. The `v` also
@@ -336,7 +348,7 @@ Pushing the tag to GitHub triggers the GitHub Action to publish to NPM.
 ### GitHub Pages Demo Deploy
 
 - Triggered on `main` branch updates
-- Must configure GitHub Pages to use GitHub Actions
+- ⚠️ Must configure GitHub Pages to use **GitHub Actions**
 
 ### Disabling
 
