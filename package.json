@@ -32,7 +32,9 @@
         "build": "npm run clean && vite build --config vite.demo.config.js && vite build && tsc -p tsconfig.build.json",
         "preview": "vite preview",
         "project-setup": "node project-setup.js && npm install",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "keywords": [
         "workflow",
@@ -48,6 +50,7 @@
     "devDependencies": {
         "@tailwindcss/postcss": "^4.1.1",
         "postcss": "^8.4.21",
+        "prettier": "^3.5.3",
         "tailwindcss": "^4.1.1",
         "typescript": "^4.9.5",
         "vite": "^4.1.5",

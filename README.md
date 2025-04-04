@@ -80,6 +80,8 @@ You'll be prompted for:
 
 This updates filenames, `package.json`, and `vite.demo.config.js`. It also runs `npm install`.
 
+You will see a reminder to [turn off your GitHub actions](#how-to-disable-the-github-pages-and-npm-publishing) at this point. You can re-enable them when you are ready.
+
 ---
 
 ## 🛠 Development Workflow
@@ -90,16 +92,11 @@ Run the dev server:
 npm run dev
 ```
 
-- Your demo site will be available at `http://localhost:8888/`
+- Your demo site's HTML and assets are in the `demo` directory.
+- Note of how the library you're working on is included in the `demo.ts` file, `../../lib/`
 - Edit your module in `lib/your-module.ts`
-- Test it on the live demo page: `index.html`
-- Demo script logic lives in `demo-page-assets/demo.ts`
-- Static assets go in `public/`
-
-```html
-<!-- Referencing a public asset -->
-<img src="/logo.png" alt="Logo">
-```
+- Demo script logic lives in `demo/assets/demo.ts`
+- Your demo site will be available at `http://localhost:8888/`
 
 When you are happy with a basic initial version, commit your changes to your local git repo:
 

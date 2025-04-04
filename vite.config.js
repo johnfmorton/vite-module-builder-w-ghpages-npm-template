@@ -20,10 +20,17 @@ module.exports = defineConfig({
                 `vite-module-builder-w-ghpages-npm-template.${format}.js`,
         },
         minify: false,
+        outDir: 'dist',
+        emptyOutDir: true,
     },
     plugins: [
-        banner(
-            `/**\n * name: ${pkg.name}\n * version: v${pkg.version}\n * description: ${pkg.description}\n * author: ${pkg.author}\n * repository: ${pkg.repository.url}\n * build date: ${now} \n */`
-        ),
+        banner(`/**
+ * name: ${pkg.name}
+ * version: v${pkg.version}
+ * description: ${pkg.description}
+ * author: ${pkg.author}
+ * repository: ${pkg.repository.url}
+ * build date: ${new Date().toISOString()}
+ */`),
     ],
 })
