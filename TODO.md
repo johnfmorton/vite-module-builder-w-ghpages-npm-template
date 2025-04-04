@@ -1,4 +1,4 @@
-# To do:
+# To do
 
 1. the README doc does not update the demo URL at the end during the project-setup script
 2. Think about using chalk to make the set up script prettier

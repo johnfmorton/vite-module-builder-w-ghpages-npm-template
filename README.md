@@ -62,16 +62,19 @@ Great for creating standalone libraries, custom elements, or utility modules.
 ## 🚀 Getting Started
 
 ### Use as a Template
+
 Click "Use this template" on the GitHub repo homepage to create a new repo under your GitHub account.
 
 ### Setup Script
+
 Once cloned and downloaded to your development machine, run the setup script:
 
 ```bash
 npm run project-setup
 ```
 
-You’ll be prompted for:
+You'll be prompted for:
+
 - The module name (e.g., `my-module-name`)
 - The GitHub Pages base URL (e.g., `https://<USERNAME>.gitHub.io/<REPO>/`)
 
@@ -273,14 +276,17 @@ Pushing the tag to GitHub triggers the GitHub Action to publish to NPM.
 ## ⚙️ GitHub Actions
 
 ### NPM Publish
+
 - Triggered by a Git tag starting with `v`
 - Requires `NPM_TOKEN` secret in GitHub repo
 
 ### GitHub Pages Demo Deploy
+
 - Triggered on `main` branch updates
 - Must configure GitHub Pages to use GitHub Actions
 
 ### Disabling
+
 In early dev, you can disable actions from repo settings → Actions.
 
 ---
@@ -303,10 +309,10 @@ In early dev, you can disable actions from repo settings → Actions.
 ## 🌐 Live Demo & Example
 
 **Live demo page:**
-https://johnfmorton.github.io/vite-module-builder-w-ghpages-npm-template/
+[https://johnfmorton.github.io/vite-module-builder-w-ghpages-npm-template/](https://johnfmorton.github.io/vite-module-builder-w-ghpages-npm-template/)
 
 **Real-world example:**
-https://github.com/johnfmorton/progressive-share-button
+[https://github.com/johnfmorton/progressive-share-button](https://github.com/johnfmorton/progressive-share-button)
 
 ---
 
