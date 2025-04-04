@@ -3,6 +3,12 @@ const fs = require('fs')
 const url = require('url')
 const path = require('path')
 
+// Remove any existing package-lock.json to ensure a fresh start
+// This ensures each new project gets its own up-to-date dependency tree
+if (fs.existsSync('package-lock.json')) {
+    fs.unlinkSync('package-lock.json')
+}
+
 const colours = {
     reset: '\x1b[0m',
     bright: '\x1b[1m',
