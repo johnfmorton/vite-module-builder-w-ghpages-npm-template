@@ -27,10 +27,11 @@ jobs:
                   node-version: ${{ matrix.node-version }}
                   registry-url: https://registry.npmjs.org/
 
+            - name: Generate package-lock.json
+              run: npm install --package-lock-only
+
             - name: Install dependencies
-              run: |
-                  rm -f package-lock.json
-                  npm install --no-shrinkwrap
+              run: npm ci
 
             - name: Build package
               run: npm run build
