@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.0.1] - 2025-04-05
+
+- Removed the `package-lock.json` from the repo.
+- GitHub workflows generate their own `package-lock.json` during the build process. This addresses an issue where dependencies in `package-lock.json` could be locked to an specific architecture of a development machine, i.e. arm64 vs. x64, that may not be supported in the machine used in Github workflow.
+- Renamed `build.yaml` to `npm-publish.yaml` to better reflect the purpose of the workflow.
+
 ## [2.0.0] - 2025-04-04
 
 - Updated the demo site to use the latest version of Tailwind CSS (^4.1.1)
