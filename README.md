@@ -1,6 +1,6 @@
 # Vite Module Builder Template
 
-[![Publish to NPM](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/build.yml/badge.svg)](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/build.yml)
+[![Publish to NPM](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/npm-publish.yml)
 [![Deploy static content to Pages](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/ghpages.yaml/badge.svg)](https://github.com/johnfmorton/vite-module-builder-w-ghpages-npm-template/actions/workflows/ghpages.yaml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -181,7 +181,7 @@ Visit the homepage of your module on NPM to confirm that you see it published.
 
 In your GitHub repo, you will need a **Access Token** from your NPM repository that will
 allow you to publish new versions of your module on your behalf. This will be stored in your GitHub secrets for the repo.
-In the `.gitHub/workflows/build.yml` file, you will need a reference to it,
+In the `.gitHub/workflows/npm-publish.yml` file, you will need a reference to it,
 `secrets.NPM_TOKEN`. If you choose a different name for your secret, you will
 need to update the workflow file.
 
@@ -367,7 +367,7 @@ In early dev, you can disable actions from repo settings → Actions.
 | `vite.config.js`                | Build config (for publishing) |
 | `vite.demo.config.js`           | Dev/demo config               |
 | `.gitHub/workflows/ghpages.yml` | Deploys demo to GitHub Pages  |
-| `.gitHub/workflows/build.yml`   | Publishes package to NPM      |
+| `.gitHub/workflows/npm-publish.yml`   | Publishes package to NPM      |
 
 ---
 
